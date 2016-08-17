@@ -1,9 +1,12 @@
 import { combineReducers } from 'redux'
 import { routerReducer as router } from 'react-router-redux'
+import counterReducer from '../routes/Counter/modules/counter'
+import gatherReducers from '../routes/Gather/reducers'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
-    // Add sync reducers here
+    counter: counterReducer,
+    gather: gatherReducers,
     router,
     ...asyncReducers
   })

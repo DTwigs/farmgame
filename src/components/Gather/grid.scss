@@ -1,0 +1,45 @@
+.tile-container {
+  display: block;
+  list-style-type: none;
+  padding: 2px;
+  width: 328px;
+  height: 328px;
+  margin: 0 auto;
+  border: 2px solid black;
+}
+
+.tile {
+  position: absolute;
+  display: block;
+  border: 2px solid black;
+  border-radius: 2%;
+  margin: 2px;
+  padding: 20px 0;
+  height: 60px;
+  width: 60px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 12px;
+  color: white;
+  transition: transform 200ms linear;
+}
+
+.selected {
+  border: 2px solid orange;
+}
+
+.WATER {
+  background-color: #00ccff;
+}
+
+.BERRIES {
+  background-color: purple;
+}
+
+.WOOD {
+  background-color: brown;
+}
+
+.STONE {
+  color: black;
+}
