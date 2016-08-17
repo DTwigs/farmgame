@@ -15,9 +15,9 @@ export class Grid extends React.Component {
 
   handleItemClick (item) {
     if (!this.selectedTile || this.selectedTile && this.compareTile) {
+      this.props.selectGridTile(item);
       this.selectedTile = item;
       this.compareTile = null;
-      this.props.selectGridTile(item);
     } else if (!this.compareTile) {
       this.compareTile = item;
       this.props.unselectGridTile(this.selectedTile);
@@ -43,29 +43,27 @@ export class Grid extends React.Component {
 
   getGridItems () {
     var i = 0;
-    return _.map(this.props.grid, (row) => {
-      return _.map(row, (item) => {
-        i += 1;
-        let className = `${classes['tile']} ${classes[item.type]}`;
-        let style = {
-          'transform': `translate3d(${item.x}px, ${item.y}px, 0px)`
-        };
-        let click = this.handleItemClick.bind(this, item);
+    return _.map(this.props.grid, (item) => {
+      i += 1;
+      let className = `${classes['tile']} ${classes[item.type]}`;
+      let style = {
+        'transform': `translate3d(${item.x}px, ${item.y}px, 0px)`
+      };
+      let click = this.handleItemClick.bind(this, item);
 
-        if (item.selected) {
-          className += ` ${classes.selected}`;
-        }
+      if (item.selected) {
+        className += ` ${classes.selected}`;
+      }
 
-        return (
-          <div
-            style={style}
-            className={className}
-            key={i}
-            onClick={click}>
-            {item.name}
-          </div>
-        );
-      });
+      return (
+        <div
+          style={style}
+          className={className}
+          key={i}
+          onClick={click}>
+          {item.name}
+        </div>
+      );
     });
   }
 

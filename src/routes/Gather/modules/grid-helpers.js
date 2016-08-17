@@ -21,15 +21,16 @@ export const TILE_SIZE = 64;
 
 export const buildResourceArray = () => {
   let grid = [];
+  let index = 0;
   _.times(GRID_SIZE, (c) => {
-    grid[c] = new Array(GRID_SIZE);
     _.times(GRID_SIZE, (r) => {
       let resourceIndex = Math.floor(Math.random() * RESOURCE_TYPES.length); //randomly generater resource
       let tile = _.merge({
         selected: false
       }, RESOURCE_TYPES[resourceIndex]);
       tile = updateTilePosition(tile, c, r);
-      grid[c][r] = tile;
+      grid[index] = tile;
+      index++;
     });
   });
   return grid;
@@ -58,3 +59,12 @@ export const tilesAreNeighbors = (tile1, tile2) => {
   }
   return false;
 }
+
+export const findTileIndex = (grid, c, r) => {
+  return _.findIndex(grid, (tile) => {
+    return tile.column === c && tile.row === r;
+  });
+}
+
+
+

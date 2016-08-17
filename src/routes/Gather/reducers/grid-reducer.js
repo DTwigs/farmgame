@@ -1,5 +1,5 @@
 import { POPULATE_GRID, SELECT_GRID_TILE, UNSELECT_GRID_TILE, SWAP_GRID_TILES } from '../actions.js';
-import { buildResourceArray, updateTilePosition } from '../modules/grid-helpers.js';
+import { buildResourceArray, updateTilePosition, findTileIndex } from '../modules/grid-helpers.js';
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -12,18 +12,19 @@ const ACTION_HANDLERS = {
   },
   [SELECT_GRID_TILE]: (state, action) => {
     const tile = action.payload;
-    console.log('the selectening: ', state[tile.column][tile.row]);
-    if (state[tile.column][tile.row]) {
+    const tileIndex = findTileIndex(state, tile.column, tile.row);
+    if (tileIndex >= 0) {
       state = _.cloneDeep(state);
-      state[tile.column][tile.row].selected = true;
+      state[tileIndex].selected = true;
     }
     return state;
   },
   [UNSELECT_GRID_TILE]: (state, action) => {
     const tile = action.payload;
-    if (state[tile.column][tile.row]) {
+    const tileIndex = findTileIndex(state, tile.column, tile.row);
+    if (tileIndex >= 0) {
       state = _.cloneDeep(state);
-      state[tile.column][tile.row].selected = false;
+      state[tileIndex].selected = false;
     }
     return state;
   },
@@ -31,17 +32,16 @@ const ACTION_HANDLERS = {
     const tile1 = action.payload.tile1;
     const tile2 = action.payload.tile2;
 
-    if (!state[tile1.column][tile1.row] || !state[tile2.column][tile2.row]) {
+    const tile1Index = findTileIndex(state, tile1.column, tile1.row);
+    const tile2Index = findTileIndex(state, tile2.column, tile2.row);
+
+    if (tile1Index < 0 || tile2Index < 0) {
       return state;
     }
 
     state = _.cloneDeep(state);
-    const tile1Updated = updateTilePosition(state[tile1.column][tile1.row], tile2.column, tile2.row);
-    const tile2Updated = updateTilePosition(state[tile2.column][tile2.row], tile1.column, tile1.row);
-    state[tile1.column][tile1.row] = tile2Updated;
-    state[tile2.column][tile2.row] = tile1Updated;
-
-    console.log('i got here', state);
+    updateTilePosition(state[tile1Index], tile2.column, tile2.row);
+    updateTilePosition(state[tile2Index], tile1.column, tile1.row);
     return state;
   },
 }
