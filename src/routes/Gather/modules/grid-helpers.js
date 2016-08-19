@@ -60,10 +60,53 @@ export const tilesAreNeighbors = (tile1, tile2) => {
   return false;
 }
 
-export const findTileIndex = (grid, c, r) => {
-  return _.findIndex(grid, (tile) => {
+export const findTileIndex = (tiles, c, r) => {
+  return _.findIndex(tiles, (tile) => {
     return tile.column === c && tile.row === r;
   });
+}
+
+export const getAllSolvedMatches = (tiles) => {
+  let solvedTiles = [];
+  _.times(GRID_SIZE, (i) => {
+    let column = _.filter(tiles, (tile) => tile.column === i);
+    column = _.sortBy(column, (tile) => tile.row);
+    // console.log(`index =  ${i} - column:`, _.map(column, (t) => t.type));
+    solvedTiles = solvedTiles.concat(findGroupedTiles(column));
+    // console.log('solved: ', _.map(solvedTiles, (t) => t.type));
+  });
+
+  _.times(GRID_SIZE, (i) => {
+    let row = _.filter(tiles, (tile) => tile.row === i)
+    row = _.sortBy(row, (tile) => tile.column);
+    solvedTiles = solvedTiles.concat(findGroupedTiles(row));
+  });
+
+  return _.uniq(solvedTiles);
+}
+
+export const findGroupedTiles = (tiles) => {
+  let previousTileType = null,
+    consecutiveCounter = 0,
+    temporaryMatches = [],
+    realMatches = [];
+
+  _.forEach(tiles, (tile) => {
+    if (!previousTileType || tile.type === previousTileType) {
+      temporaryMatches = temporaryMatches.concat(tile);
+      consecutiveCounter += 1;
+    } else {
+      temporaryMatches = [tile];
+      consecutiveCounter = 1;
+    }
+
+    if (consecutiveCounter >= 3) {
+      realMatches = temporaryMatches;
+    }
+    previousTileType = tile.type;
+  });
+
+  return realMatches;
 }
 
 
