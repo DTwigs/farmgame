@@ -2,7 +2,7 @@ import React from 'react';
 import classes from './grid.scss';
 import Tile from './tile.js';
 import { connect } from 'react-redux';
-import { populateGrid, selectGridTile, unselectGridTile, swapGridTiles, removeGridTiles } from '../../routes/Gather/actions.js';
+import { populateGrid, selectGridTile, unselectGridTile, swapAndMatch } from '../../routes/Gather/actions.js';
 import { tilesAreNeighbors, getAllSolvedMatches } from '../../routes/Gather/modules/grid-helpers.js';
 
 export class Grid extends React.Component {
@@ -15,28 +15,6 @@ export class Grid extends React.Component {
     this.compareTile = null;
   }
 
-  componentDidUpdate () {
-    if (!(this.selectedTile && this.compareTile)) {
-      return;
-    }
-
-    const solvedTiles = getAllSolvedMatches(this.props.grid);
-    if (solvedTiles.length >= 3) {
-      console.log('we did it ', _.map(solvedTiles, (t) => t.type));
-      this.selectedTile = null;
-      this.compareTile = null;
-      this.props.removeGridTiles(solvedTiles);
-    } else if (this.selectedTile && this.compareTile) {
-      console.log('no matches');
-      // unswap tiles
-      setTimeout(() => {
-        this.props.swapGridTiles(this.compareTile, this.selectedTile)
-        this.selectedTile = null;
-        this.compareTile = null;
-      }, 200);
-    }
-  }
-
   handleTileClick (item) {
     this.selectTile(item);
 
@@ -46,7 +24,7 @@ export class Grid extends React.Component {
 
     if (tilesAreNeighbors(this.selectedTile, this.compareTile)) {
       // swap tiles
-      this.props.swapGridTiles(this.selectedTile, this.compareTile);
+      this.props.swapAndMatch(this.selectedTile, this.compareTile);
     } else {
       this.selectedTile = null;
       this.compareTile = null;
@@ -107,16 +85,14 @@ Grid.propTypes = {
   populateGrid: React.PropTypes.func.isRequired,
   selectGridTile: React.PropTypes.func.isRequired,
   unselectGridTile: React.PropTypes.func.isRequired,
-  swapGridTiles: React.PropTypes.func.isRequired,
-  removeGridTiles: React.PropTypes.func.isRequired
+  swapAndMatch: React.PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = {
   populateGrid,
   selectGridTile,
   unselectGridTile,
-  swapGridTiles,
-  removeGridTiles
+  swapAndMatch
 };
 
 const mapStateToProps = (state) => ({

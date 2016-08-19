@@ -50,13 +50,11 @@ const ACTION_HANDLERS = {
   },
 
   [REMOVE_GRID_TILES]: (state, action) => {
-    console.log(state.length)
     state = _.map(state, (tile) => {
       if(!_.includes(action.payload.tiles, tile)) {
         return tile;
       }
     });
-    console.log(state.length)
     return state;
   },
 }

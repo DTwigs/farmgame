@@ -12,10 +12,6 @@ export const RESOURCE_TYPES = [{
   name: 'Water',
   type: 'WATER',
   quantity: 1
-}, {
-  name: 'Stone',
-  type: 'STONE',
-  quantity: 1
 }];
 export const TILE_SIZE = 64;
 
@@ -63,6 +59,8 @@ export const tilesAreNeighbors = (tile1, tile2) => {
 
 export const getAllSolvedMatches = (tiles) => {
   let solvedTiles = [];
+
+  // All matches in each column
   _.times(GRID_SIZE, (i) => {
     let column = _.filter(tiles, (tile) => tile.column === i);
     column = _.sortBy(column, (tile) => tile.row);
@@ -71,6 +69,7 @@ export const getAllSolvedMatches = (tiles) => {
     // console.log('solved: ', _.map(solvedTiles, (t) => t.type));
   });
 
+  // All matches in each row
   _.times(GRID_SIZE, (i) => {
     let row = _.filter(tiles, (tile) => tile.row === i)
     row = _.sortBy(row, (tile) => tile.column);
