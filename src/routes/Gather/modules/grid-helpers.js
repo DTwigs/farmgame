@@ -41,6 +41,7 @@ export const updateTilePosition = (tile, c, r) => {
   tile.row = r;
   tile.x = c * TILE_SIZE;
   tile.y = r * TILE_SIZE;
+  tile.id = `${c}-${r}`;
   return tile;
 }
 
@@ -58,12 +59,6 @@ export const tilesAreNeighbors = (tile1, tile2) => {
     return true;
   }
   return false;
-}
-
-export const findTileIndex = (tiles, c, r) => {
-  return _.findIndex(tiles, (tile) => {
-    return tile.column === c && tile.row === r;
-  });
 }
 
 export const getAllSolvedMatches = (tiles) => {

@@ -5,7 +5,6 @@ import gatherReducers from '../routes/Gather/reducers'
 
 export const makeRootReducer = (asyncReducers) => {
   return combineReducers({
-    counter: counterReducer,
     gather: gatherReducers,
     router,
     ...asyncReducers

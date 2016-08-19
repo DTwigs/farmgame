@@ -10,40 +10,45 @@ const ACTION_HANDLERS = {
     state = buildResourceArray();
     return state;
   },
+
   [SELECT_GRID_TILE]: (state, action) => {
     const tile = action.payload;
-    const tileIndex = findTileIndex(state, tile.column, tile.row);
-    if (tileIndex >= 0) {
+    const stateTile = _.find(state, {id: tile.id});
+    if (stateTile) {
+      stateTile.selected = true;
       state = _.cloneDeep(state);
-      state[tileIndex].selected = true;
     }
     return state;
   },
+
   [UNSELECT_GRID_TILE]: (state, action) => {
     const tile = action.payload;
-    const tileIndex = findTileIndex(state, tile.column, tile.row);
-    if (tileIndex >= 0) {
+    const stateTile = _.find(state, {id: tile.id});
+    if (stateTile) {
+      stateTile.selected = false;
       state = _.cloneDeep(state);
-      state[tileIndex].selected = false;
     }
     return state;
   },
+
   [SWAP_GRID_TILES]: (state, action) => {
     const tile1 = action.payload.tile1;
     const tile2 = action.payload.tile2;
 
-    const tile1Index = findTileIndex(state, tile1.column, tile1.row);
-    const tile2Index = findTileIndex(state, tile2.column, tile2.row);
+    const stateTile1 = _.find(state, {id: tile1.id});
+    const stateTile2 = _.find(state, {id: tile2.id});
 
-    if (tile1Index < 0 || tile2Index < 0) {
+    if (!stateTile1 || !stateTile2) {
       return state;
     }
 
+    updateTilePosition(stateTile1, tile2.column, tile2.row);
+    updateTilePosition(stateTile2, tile1.column, tile1.row);
     state = _.cloneDeep(state);
-    updateTilePosition(state[tile1Index], tile2.column, tile2.row);
-    updateTilePosition(state[tile2Index], tile1.column, tile1.row);
+
     return state;
   },
+
   [REMOVE_GRID_TILES]: (state, action) => {
     console.log(state.length)
     state = _.map(state, (tile) => {

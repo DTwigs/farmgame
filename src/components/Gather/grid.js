@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './grid.scss';
+import Tile from './tile.js';
 import { connect } from 'react-redux';
 import { populateGrid, selectGridTile, unselectGridTile, swapGridTiles, removeGridTiles } from '../../routes/Gather/actions.js';
 import { tilesAreNeighbors, getAllSolvedMatches } from '../../routes/Gather/modules/grid-helpers.js';
@@ -36,7 +37,7 @@ export class Grid extends React.Component {
     }
   }
 
-  handleItemClick (item) {
+  handleTileClick (item) {
     this.selectTile(item);
 
     if (!(this.selectedTile && this.compareTile)) {
@@ -63,33 +64,27 @@ export class Grid extends React.Component {
     }
   }
 
-
-
   getGridItems () {
     var i = 0;
-    return _.map(this.props.grid, (item) => {
-      if (!item) {
-        return;
-      }
-      i += 1;
-      let className = `${classes['tile']} ${classes[item.type]}`;
-      let style = {
-        'transform': `translate3d(${item.x}px, ${item.y}px, 0px)`
-      };
-      let click = this.handleItemClick.bind(this, item);
+    return _.map(this.props.grid, (tile) => {
+      if (!tile) { return; }
 
-      if (item.selected) {
-        className += ` ${classes.selected}`;
-      }
+      i += 1;
+      let className = `${classes['tile']} ${classes[tile.type]}`;
+      className += tile.selected ? ` ${classes.selected}` : "";
+
+      let style = {
+        'transform': `translate3d(${tile.x}px, ${tile.y}px, 0px)`
+      };
 
       return (
-        <div
+        <Tile
           style={style}
           className={className}
           key={i}
-          onClick={click}>
-          {item.name}
-        </div>
+          onClick={this.handleTileClick.bind(this, tile)}
+          name={tile.name}>
+        </Tile>
       );
     });
   }
