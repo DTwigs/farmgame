@@ -1,15 +1,50 @@
-import { POPULATE_GRID, SELECT_GRID_TILE, UNSELECT_GRID_TILE, SWAP_GRID_TILES, REMOVE_GRID_TILES } from '../actions.js';
-import { buildResourceArray, updateTilePosition, findTileIndex } from '../modules/grid-helpers.js';
+import {
+  ADD_TILE,
+  SELECT_GRID_TILE,
+  UNSELECT_GRID_TILE,
+  SWAP_GRID_TILES,
+  REMOVE_GRID_TILES,
+  SHIFT_TILES_DOWN
+} from '../actions.js';
+
+import { buildResourceArray, updateTilePosition, findTileIndex, TILE_SIZE } from '../modules/grid-helpers.js';
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 
 
-const ACTION_HANDLERS = {
-  [POPULATE_GRID]: (state, action) => {
-    state = buildResourceArray();
-    return state;
-  },
+
+const TILE_ACTION_HANDLERS = {
+  [ADD_TILE]: (state, action) => {
+    return {
+      ...action.payload.tile,
+      row: action.payload.row,
+      column: action.payload.column,
+      id: `${action.payload.row}-${action.payload.column}`,
+      x: action.payload.column * TILE_SIZE,
+      y: action.payload.row * TILE_SIZE
+    }
+  },
+ [SHIFT_TILES_DOWN]: (state, action) => {
+    let tile = action.payload.tile;
+    return {
+      ...tile,
+      row: tile.row + 1,
+      column: tile.column,
+      id: `${tile.row + 1}-${tile.column}`,
+      x: tile.column * TILE_SIZE,
+      y: (tile.row + 1) * TILE_SIZE
+    }
+  }
+}
+
+const GRID_ACTION_HANDLERS = {
+  [ADD_TILE]: (state, action) => {
+    return [
+      ...state,
+      tileReducer(state, action)
+    ];
+  },
 
   [SELECT_GRID_TILE]: (state, action) => {
     const tile = action.payload;
@@ -41,7 +76,7 @@ const ACTION_HANDLERS = {
     if (!stateTile1 || !stateTile2) {
       return state;
     }
-
+    console.log(tile1, tile2);
     updateTilePosition(stateTile1, tile2.column, tile2.row);
     updateTilePosition(stateTile2, tile1.column, tile1.row);
     state = _.cloneDeep(state);
@@ -51,19 +86,61 @@ const ACTION_HANDLERS = {
 
   [REMOVE_GRID_TILES]: (state, action) => {
     state = _.map(state, (tile) => {
+
       if(!_.includes(action.payload.tiles, tile)) {
         return tile;
       }
     });
     return state;
   },
+
+  [SHIFT_TILES_DOWN]: (state, action) => {
+    let columnNumbers = [];
+    _.forEach(action.payload.tiles, (tile) => {
+      let colNum = _.find(columnNumbers, {column: tile.column});
+      if (colNum) {
+        colNum.shiftSize += 1;
+        colNum.highestRow = tile.row > colNum.highestRow ? tile.row : colNum.highestRow;
+      } else {
+        columnNumbers = columnNumbers.concat({
+          column: tile.column,
+          shiftSize: 1,
+          highestRow: tile.row
+        });
+      }
+    });
+
+    state = _.map(state, (tile) => {
+      if (!tile) { return }
+      // debugger;
+      let colNum = _.find(columnNumbers, {column: tile.column});
+      if (colNum && tile.row < colNum.highestRow) {
+        let tileAction = _.cloneDeep(action);
+        tileAction.payload = { tile };
+        _.times(colNum.shiftSize, () => {
+          tile = tileReducer(state, tileAction);
+          tileAction.payload = { tile };
+        });
+      }
+      return tile;
+    });
+
+    return state;
+  }
 }
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = [];
-export default function gridReducer (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
+
+const tileInitialState = [];
+export function tileReducer (state = tileInitialState, action) {
+  const handler = TILE_ACTION_HANDLERS[action.type]
+  return handler ? handler(state, action) : state
+}
+
+const gridInitialState = [];
+export default function gridReducer (state = gridInitialState, action) {
+  const handler = GRID_ACTION_HANDLERS[action.type]
   return handler ? handler(state, action) : state
 }

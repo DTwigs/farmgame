@@ -1,43 +1,13 @@
 export const GRID_SIZE = 5; // Grid height and width
 
-export const RESOURCE_TYPES = [{
-  name: 'Wood',
-  type: 'WOOD',
-  quantity: 1
-},{
-  name: 'Berries',
-  type: 'BERRIES',
-  quantity: 1
-}, {
-  name: 'Water',
-  type: 'WATER',
-  quantity: 1
-}];
 export const TILE_SIZE = 64;
-
-export const buildResourceArray = () => {
-  let grid = [];
-  let index = 0;
-  _.times(GRID_SIZE, (c) => {
-    _.times(GRID_SIZE, (r) => {
-      let resourceIndex = Math.floor(Math.random() * RESOURCE_TYPES.length); //randomly generater resource
-      let tile = _.merge({
-        selected: false
-      }, RESOURCE_TYPES[resourceIndex]);
-      tile = updateTilePosition(tile, c, r);
-      grid[index] = tile;
-      index++;
-    });
-  });
-  return grid;
-}
 
 export const updateTilePosition = (tile, c, r) => {
   tile.column = c;
   tile.row = r;
   tile.x = c * TILE_SIZE;
   tile.y = r * TILE_SIZE;
-  tile.id = `${c}-${r}`;
+  tile.id = `${r}-${c}`;
   return tile;
 }
 
@@ -86,7 +56,7 @@ export const findGroupedTiles = (tiles) => {
     realMatches = [];
 
   _.forEach(tiles, (tile) => {
-    if (!previousTileType || tile.type === previousTileType) {
+    if (!previousTileType || tile.resource.type === previousTileType) {
       temporaryMatches = temporaryMatches.concat(tile);
       consecutiveCounter += 1;
     } else {
@@ -97,7 +67,7 @@ export const findGroupedTiles = (tiles) => {
     if (consecutiveCounter >= 3) {
       realMatches = temporaryMatches;
     }
-    previousTileType = tile.type;
+    previousTileType = tile.resource.type;
   });
 
   return realMatches;

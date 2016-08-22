@@ -2,13 +2,13 @@ import React from 'react';
 import classes from './grid.scss';
 import Tile from './tile.js';
 import { connect } from 'react-redux';
-import { populateGrid, selectGridTile, unselectGridTile, swapAndMatch } from '../../routes/Gather/actions.js';
+import { populateResourceTiles, selectGridTile, unselectGridTile, swapAndMatch } from '../../routes/Gather/actions.js';
 import { tilesAreNeighbors, getAllSolvedMatches } from '../../routes/Gather/modules/grid-helpers.js';
 
 export class Grid extends React.Component {
   constructor (props) {
     super(props);
-    this.props.populateGrid();
+    this.props.populateResourceTiles();
     this.getGridItems = this.getGridItems.bind(this);
     this.selectTile = this.selectTile.bind(this);
     this.selectedTile = null;
@@ -48,7 +48,7 @@ export class Grid extends React.Component {
       if (!tile) { return; }
 
       i += 1;
-      let className = `${classes['tile']} ${classes[tile.type]}`;
+      let className = `${classes['tile']} ${classes[tile.resource.type]}`;
       className += tile.selected ? ` ${classes.selected}` : "";
 
       let style = {
@@ -61,7 +61,7 @@ export class Grid extends React.Component {
           className={className}
           key={i}
           onClick={this.handleTileClick.bind(this, tile)}
-          name={tile.name}>
+          name={tile.resource.name}>
         </Tile>
       );
     });
@@ -82,14 +82,14 @@ export class Grid extends React.Component {
 
 Grid.propTypes = {
   grid: React.PropTypes.array.isRequired,
-  populateGrid: React.PropTypes.func.isRequired,
+  populateResourceTiles: React.PropTypes.func.isRequired,
   selectGridTile: React.PropTypes.func.isRequired,
   unselectGridTile: React.PropTypes.func.isRequired,
   swapAndMatch: React.PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = {
-  populateGrid,
+  populateResourceTiles,
   selectGridTile,
   unselectGridTile,
   swapAndMatch
