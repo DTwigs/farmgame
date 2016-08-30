@@ -1,5 +1,6 @@
 import {
   ADD_TILE,
+  UPDATE_TILE,
   SELECT_GRID_TILE,
   UNSELECT_GRID_TILE,
   SWAP_GRID_TILES,
@@ -7,7 +8,13 @@ import {
   SHIFT_TILES_DOWN
 } from '../actions.js';
 
-import { buildResourceArray, updateTilePosition, findTileIndex, TILE_SIZE } from '../modules/grid-helpers.js';
+import {
+  buildResourceArray,
+  updateTilePosition,
+  findTileIndex,
+  poolTile,
+  TILE_SIZE
+} from '../modules/grid-helpers.js';
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
@@ -46,6 +53,23 @@ const GRID_ACTION_HANDLERS = {
     ];
   },
 
+  [UPDATE_TILE]: (state, action) => {
+    state = _.map(state, (tile) => {
+      if (tile === action.payload.tile) {
+        tile.row = action.payload.row;
+        tile.column = action.payload.column;
+        tile.pooled = action.payload.pooled;
+        tile.resource = action.payload.resource;
+        tile.id = `${action.payload.row}-${action.payload.column}`;
+        tile.x = action.payload.column * TILE_SIZE;
+        tile.y = action.payload.row * TILE_SIZE;
+        tile = _.clone(tile);
+      }
+      return tile;
+    })
+    return state;
+  },
+
   [SELECT_GRID_TILE]: (state, action) => {
     const tile = action.payload;
     const stateTile = _.find(state, {id: tile.id});
@@ -76,7 +100,7 @@ const GRID_ACTION_HANDLERS = {
     if (!stateTile1 || !stateTile2) {
       return state;
     }
-    console.log(tile1, tile2);
+    // console.log(tile1, tile2);
     updateTilePosition(stateTile1, tile2.column, tile2.row);
     updateTilePosition(stateTile2, tile1.column, tile1.row);
     state = _.cloneDeep(state);
@@ -90,12 +114,16 @@ const GRID_ACTION_HANDLERS = {
       if(!_.includes(action.payload.tiles, tile)) {
         return tile;
       }
+      return poolTile(_.clone(tile), -1, -1);
     });
     return state;
   },
 
   [SHIFT_TILES_DOWN]: (state, action) => {
     let columnNumbers = [];
+
+    //Determine the columnNumbers that need shifting
+    //Determine the amount of spaces that need shifting.
     _.forEach(action.payload.tiles, (tile) => {
       let colNum = _.find(columnNumbers, {column: tile.column});
       if (colNum) {
@@ -112,7 +140,6 @@ const GRID_ACTION_HANDLERS = {
 
     state = _.map(state, (tile) => {
       if (!tile) { return }
-      // debugger;
       let colNum = _.find(columnNumbers, {column: tile.column});
       if (colNum && tile.row < colNum.highestRow) {
         let tileAction = _.cloneDeep(action);

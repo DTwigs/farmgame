@@ -50,6 +50,7 @@ export class Grid extends React.Component {
       i += 1;
       let className = `${classes['tile']} ${classes[tile.resource.type]}`;
       className += tile.selected ? ` ${classes.selected}` : "";
+      className += tile.pooled ? ` ${classes.pooled}` : "";
 
       let style = {
         'transform': `translate3d(${tile.x}px, ${tile.y}px, 0px)`

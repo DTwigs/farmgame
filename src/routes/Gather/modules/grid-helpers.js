@@ -2,6 +2,8 @@ export const GRID_SIZE = 5; // Grid height and width
 
 export const TILE_SIZE = 64;
 
+export const ANIMATION_TIME = 150;
+
 export const updateTilePosition = (tile, c, r) => {
   tile.column = c;
   tile.row = r;
@@ -9,6 +11,11 @@ export const updateTilePosition = (tile, c, r) => {
   tile.y = r * TILE_SIZE;
   tile.id = `${r}-${c}`;
   return tile;
+}
+
+export const poolTile = (tile) => {
+  tile.pooled = true;
+  return updateTilePosition(tile, -1, -1);
 }
 
 export const tilesAreNeighbors = (tile1, tile2) => {
@@ -71,6 +78,16 @@ export const findGroupedTiles = (tiles) => {
   });
 
   return realMatches;
+}
+
+export const getGatherStateValues = (getState) => {
+  let state = getState().gather;
+  return {
+    gridWidth: 5, //state.gridWidth,
+    gridHeight: 5, //state.gridHeight,
+    resourceTypes: state.resourceTypes,
+    grid: state.grid
+  }
 }
 
 
