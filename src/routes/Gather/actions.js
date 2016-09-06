@@ -63,52 +63,57 @@ export function shiftGridTilesDown (tiles) {
   }
 }
 
+function findMatches (subsequentTry = false) {
+  return (dispatch, getState) => {
+    let tiles = getState().gather.grid;
+    const solvedTiles = getAllSolvedMatches(tiles);
+
+    if (solvedTiles.length >= 3) {
+      setTimeout(() => {
+        dispatch(removeGridTiles(solvedTiles));
+        dispatch(fillEmptyGridSpaces(solvedTiles));
+        setTimeout(() => {
+          dispatch(shiftGridTilesDown(solvedTiles));
+          dispatch(findMatches(true));
+        }, ANIMATION_TIME);
+      }, ANIMATION_TIME);
+    } else if (!subsequentTry) {
+      return false;
+    }
+    return true;
+  }
+}
+
+function fillEmptyGridSpaces(solvedTiles) {
+  return (dispatch, getState) => {
+    let sv = getGatherStateValues(getState);
+    let columns = _.uniq(_.map(solvedTiles, (tile) => tile.column));
+    let pooled = _.filter(sv.grid, {pooled: true});
+
+    _.forEach(columns, (col) => {
+      let column = _.filter(sv.grid, {column: col});
+      let emptySpaces = sv.gridHeight - column.length;
+
+      // Grab a pooled tile and update its position to sit over the column
+      // it will drop down into.
+      _.times(emptySpaces, (x) => {
+        const randomIndex = Math.floor(Math.random() * sv.resourceTypes.length);
+         let resource = sv.resourceTypes[randomIndex];
+        let tile = pooled.pop();
+        let row = -1 - x;
+        dispatch(updateTile(tile, row, col, false, resource))
+      });
+    });
+  }
+}
+
 export function swapAndMatch (tile1, tile2) {
   return (dispatch, getState) => {
-    const resourceTypes = getState().gather.resourceTypes;
     dispatch(swapGridTiles(tile1, tile2));
 
-    function findMatches (subsequentTry = false) {
-      let tiles = getState().gather.grid;
-      const solvedTiles = getAllSolvedMatches(tiles);
+    let matchesFound = dispatch(findMatches());
 
-      if (solvedTiles.length >= 3) {
-        setTimeout(() => {
-          dispatch(removeGridTiles(solvedTiles));
-          fillEmptyGridSpaces(solvedTiles);
-          setTimeout(() => {
-            dispatch(shiftGridTilesDown(solvedTiles));
-            findMatches(true);
-          }, ANIMATION_TIME);
-        }, ANIMATION_TIME);
-      } else if (!subsequentTry) {
-        return false;
-      }
-      return true;
-    }
-
-    function fillEmptyGridSpaces(solvedTiles) {
-      let sv = getGatherStateValues(getState);
-      let columns = _.uniq(_.map(solvedTiles, (tile) => tile.column));
-      let pooled = _.filter(sv.grid, {pooled: true});
-
-      _.forEach(columns, (col) => {
-        let column = _.filter(sv.grid, {column: col});
-        let emptySpaces = sv.gridHeight - column.length;
-
-        // Grab a pooled tile and update its position to sit over the column
-        // it will drop down into.
-        _.times(emptySpaces, (x) => {
-          const randomIndex = Math.floor(Math.random() * sv.resourceTypes.length);
-          let resource = sv.resourceTypes[randomIndex];
-          let tile = pooled.pop();
-          let row = -1 - x;
-          dispatch(updateTile(tile, row, col, false, resource))
-        });
-      });
-    }
-
-    if (!findMatches()) {
+    if (!matchesFound) {
       // unswap tiles after animation
       setTimeout(() => {
         // this will actually switch the tiles back to their original positions
