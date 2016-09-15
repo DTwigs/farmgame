@@ -5,7 +5,9 @@ import {
   removeGridTiles,
   updateTile,
   shiftGridTilesDown,
-  SWAP_AND_MATCH } from '../../routes/Gather/actions.js';
+  addTile,
+  SWAP_AND_MATCH,
+  POPULATE_TILES } from '../../routes/Gather/actions.js';
 import {
   getAllSolvedMatches,
   gatherStateSelector,
@@ -65,8 +67,55 @@ export function* watchSwapAndMatch() {
   }
 }
 
+function* populateTiles() {
+  let sv = yield select(gatherStateSelector);
+  let row, column;
+  let totalTiles = sv.gridWidth * sv.gridHeight;
+
+  // Add tiles and randomize the resource of each tile
+  for (row = 0; row < sv.gridWidth; row++) {
+    for (column = 0; column < sv.gridHeight; column++) {
+      let tile = {};
+      let resourceCopy = _.clone(sv.resourceTypes);
+
+      do {
+        const randomIndex = Math.floor(Math.random() * resourceCopy.length);
+        tile.resource = resourceCopy[randomIndex];
+        _.remove(resourceCopy, (x) => x == resourceCopy[randomIndex]);
+      }
+      while ((column >= 2 &&
+        sv.grid[(column - 1) + (row * sv.gridWidth)].resource == tile.resource &&
+        sv.grid[(column - 2) + (row * sv.gridWidth)].resource == tile.resource)
+      ||
+        (row >= 2 &&
+        sv.grid[column + ((row - 1) * sv.gridWidth)].resource == tile.resource &&
+        sv.grid[column + ((row - 2) * sv.gridWidth)].resource == tile.resource)
+      );
+      yield put(addTile(tile, row, column));
+      sv = yield select(gatherStateSelector);
+    }
+  }
+
+  // Add pooled tiles
+  for (let tileCount = 0; tileCount < totalTiles; tileCount++) {
+    let tile = {
+      pooled: true,
+      resource: sv.resourceTypes[0]
+    }
+    yield put(addTile(tile, -1, -1));
+  }
+}
+
+export function* watchPopulateTiles() {
+  while (true) {
+    const action = yield take(POPULATE_TILES);
+    yield call(populateTiles);
+  }
+}
+
 export default function* gridSaga() {
   yield [
+    watchPopulateTiles(),
     watchSwapAndMatch()
   ]
 }

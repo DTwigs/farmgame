@@ -1,7 +1,6 @@
 import { applyMiddleware, compose, createStore } from 'redux'
 import { routerMiddleware } from 'react-router-redux'
 import createSagaMiddleware from 'redux-saga'
-import thunk from 'redux-thunk'
 import makeRootReducer from './reducers'
 import allSagas from '../sagas'
 
@@ -10,7 +9,7 @@ export default (initialState = {}, history) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
-  const middleware = [thunk, routerMiddleware(history), sagaMiddleware]
+  const middleware = [routerMiddleware(history), sagaMiddleware]
 
   // ======================================================
   // Store Enhancers
