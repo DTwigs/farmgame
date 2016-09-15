@@ -13,7 +13,8 @@ import {
   updateTilePosition,
   findTileIndex,
   poolTile,
-  TILE_SIZE
+  TILE_SIZE,
+  GRID_SIZE
 } from '../modules/grid-helpers.js';
 // ------------------------------------
 // Action Handlers
@@ -122,37 +123,25 @@ const GRID_ACTION_HANDLERS = {
   [SHIFT_TILES_DOWN]: (state, action) => {
     let columnNumbers = [];
 
-    //Determine the columnNumbers that need shifting
-    //Determine the amount of spaces that need shifting.
     _.forEach(action.payload.tiles, (tile) => {
-      let colNum = _.find(columnNumbers, {column: tile.column});
-      if (colNum) {
-        colNum.shiftSize += 1;
-        colNum.highestRow = tile.row > colNum.highestRow ? tile.row : colNum.highestRow;
-      } else {
-        columnNumbers = columnNumbers.concat({
-          column: tile.column,
-          shiftSize: 1,
-          highestRow: tile.row
-        });
+      if (!columnNumbers.includes(tile.column)) {
+        columnNumbers = columnNumbers.concat(tile.column);
       }
     });
 
-    state = _.map(state, (tile) => {
-      if (!tile) { return }
-      let colNum = _.find(columnNumbers, {column: tile.column});
-      if (colNum && tile.row < colNum.highestRow) {
-        let tileAction = _.cloneDeep(action);
-        tileAction.payload = { tile };
-        _.times(colNum.shiftSize, () => {
-          tile = tileReducer(state, tileAction);
-          tileAction.payload = { tile };
-        });
-      }
-      return tile;
+    _.forEach(columnNumbers, (colNum) => {
+      let columnTiles = _.filter(state, {column: colNum});
+      columnTiles = _.sortBy(columnTiles, (o) => o.row);
+      let rowIndex = 0;
+      _.forEach(columnTiles, (colTile) => {
+        colTile.row = rowIndex;
+        colTile.y = rowIndex * TILE_SIZE
+        colTile.id = `${rowIndex}-${colTile.column}`;
+        rowIndex++;
+      });
     });
 
-    return state;
+    return _.cloneDeep(state);
   }
 }
 

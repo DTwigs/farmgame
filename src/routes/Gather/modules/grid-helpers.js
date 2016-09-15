@@ -90,5 +90,14 @@ export const getGatherStateValues = (getState) => {
   }
 }
 
+export const gatherStateSelector = (state) => {
+  state = state.gather;
+  return {
+    gridWidth: 5, //state.gridWidth,
+    gridHeight: 5, //state.gridHeight,
+    resourceTypes: state.resourceTypes,
+    grid: state.grid
+  };
+}
 
 
