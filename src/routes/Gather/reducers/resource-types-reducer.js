@@ -1,4 +1,7 @@
-import { ADD_RESOURCE_TYPE } from '../actions.js';
+import {
+  ADD_RESOURCE_TYPE,
+  UPDATE_RESOURCE_QUANTITY
+} from '../actions.js';
 
 const ACTION_HANDLERS = {
   [ADD_RESOURCE_TYPE]: (state, action) => {
@@ -6,25 +9,35 @@ const ACTION_HANDLERS = {
       ...state,
       action.payload
     ];
+  },
+  [UPDATE_RESOURCE_QUANTITY]: (state, action) => {
+    let resource = _.find(state, {type: action.resourceType})
+    if (!resource) return state
+    resource.quantity += action.quantity
+    return _.cloneDeep(state)
   }
 }
 
 const initialState = [{
   name: 'Wood',
   type: 'WOOD',
-  quantity: 1
+  value: 1,
+  quantity: 0
 },{
   name: 'Berries',
   type: 'BERRIES',
-  quantity: 1
+  value: 1,
+  quantity: 0
 }, {
   name: 'Water',
   type: 'WATER',
-  quantity: 1
+  value: 1,
+  quantity: 0
 }, {
   name: 'Stone',
   type: 'STONE',
-  quantity: 1
+  value: 1,
+  quantity: 0
 }];
 
 export default function resourceTypesReducer (state = initialState, action) {

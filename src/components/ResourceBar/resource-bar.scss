@@ -1,0 +1,24 @@
+.resource-bar {
+  width: 100%;
+  list-style-type: none;
+  margin: 0;
+  padding: 20px 0;
+  background-color: #F0EFF4;
+  color: #474044;
+
+  transition: background-color .2s;
+}
+
+.resource-bar--glow {
+  background-color: #F7E4A0;
+}
+
+.resource-bar_item {
+  display: inline-block;
+  width: 25%;
+}
+
+.resource-bar_item-name {
+  margin-right: 10px;
+}
+

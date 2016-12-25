@@ -5,7 +5,8 @@ import {
   UNSELECT_GRID_TILE,
   SWAP_GRID_TILES,
   REMOVE_GRID_TILES,
-  SHIFT_TILES_DOWN
+  SHIFT_TILES_DOWN,
+  CLEAR_ALL_GRID_TILES,
 } from '../actions.js';
 
 import {
@@ -142,7 +143,11 @@ const GRID_ACTION_HANDLERS = {
     });
 
     return _.cloneDeep(state);
-  }
+  },
+
+  [CLEAR_ALL_GRID_TILES]: (state, action) => {
+    return [];
+  },
 }
 
 // ------------------------------------

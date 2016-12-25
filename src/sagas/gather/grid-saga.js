@@ -6,6 +6,8 @@ import {
   updateTile,
   shiftGridTilesDown,
   addTile,
+  clearAllTiles,
+  updateResourceQuantity,
   SWAP_AND_MATCH,
   POPULATE_TILES } from '../../routes/Gather/actions.js';
 import {
@@ -20,6 +22,7 @@ function* findMatches(subsequentTry = false) {
   if (solvedTiles.length >= 3) {
     yield call(delay, ANIMATION_TIME);
     yield put(removeGridTiles(solvedTiles));
+    yield call(tallyUpResources, solvedTiles);
     yield fillEmptyGridSpaces(solvedTiles);
     yield call(delay, ANIMATION_TIME);
     yield put(shiftGridTilesDown(solvedTiles));
@@ -28,6 +31,12 @@ function* findMatches(subsequentTry = false) {
     return false;
   }
   return true;
+}
+
+function* tallyUpResources(solvedTiles) {
+  for (let i = 0; i < solvedTiles.length; i++) {
+    yield put(updateResourceQuantity(solvedTiles[i].resource.type, solvedTiles[i].resource.value))
+  }
 }
 
 function* fillEmptyGridSpaces(solvedTiles) {
@@ -44,10 +53,13 @@ function* fillEmptyGridSpaces(solvedTiles) {
     // Grab a pooled tile and update its position to sit over the column
     // it will drop down into.
     for (let x = 0; x < emptySpaces; x++) {
-      const randomIndex = Math.floor(Math.random() * sv.resourceTypes.length);
-         let resource = sv.resourceTypes[randomIndex];
-      let tile = pooled.pop();
-      let row = -1 - x;
+      const randomIndex = Math.floor(Math.random() * sv.resourceTypes.length),
+        randomPoolIndex = Math.floor(Math.random() * pooled.length),
+        resource = sv.resourceTypes[randomIndex],
+        tile = pooled[randomPoolIndex],
+        row = -1 - x;
+
+      pooled.splice(randomPoolIndex, 1);
 
       yield put(updateTile(tile, row, col, false, resource));
     }
@@ -72,6 +84,7 @@ function* populateTiles() {
   let row, column;
   let totalTiles = sv.gridWidth * sv.gridHeight;
 
+  yield put(clearAllTiles())
   // Add tiles and randomize the resource of each tile
   for (row = 0; row < sv.gridWidth; row++) {
     for (column = 0; column < sv.gridHeight; column++) {

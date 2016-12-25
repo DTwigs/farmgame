@@ -1,4 +1,4 @@
-import { getAllSolvedMatches, getGatherStateValues, ANIMATION_TIME } from '../../routes/Gather/modules/grid-helpers.js';
+import { getAllSolvedMatches, ANIMATION_TIME } from '../../routes/Gather/modules/grid-helpers.js';
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -11,8 +11,10 @@ export const SWAP_AND_MATCH = 'resources/SWAP_AND_MATCH';
 export const REMOVE_GRID_TILES = 'resources/REMOVE_GRID_TILES';
 export const SHIFT_TILES_DOWN = 'resources/SHIFT_GRID_TILES_DOWN';
 export const POPULATE_TILES = 'resources/POPULATE_GRID_TILES';
+export const CLEAR_ALL_GRID_TILES = 'resources/CLEAR_ALL_GRID_TILES';
 
 export const ADD_RESOURCE_TYPE = 'resourcesTypes/ADD_RESOURCE_TYPE';
+export const UPDATE_RESOURCE_QUANTITY = 'resourceTypes/UPDATE_RESOURCE_QUANTITY';
 
 // ------------------------------------
 // Actions
@@ -77,5 +79,19 @@ export function swapAndMatch (tile1, tile2) {
 export function populateResourceTiles () {
   return {
     type: POPULATE_TILES
+  }
+}
+
+export function clearAllTiles () {
+  return {
+    type: CLEAR_ALL_GRID_TILES
+  }
+}
+
+export function updateResourceQuantity(resourceType, quantity) {
+  return {
+    type: UPDATE_RESOURCE_QUANTITY,
+    resourceType,
+    quantity
   }
 }

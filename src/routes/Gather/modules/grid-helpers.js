@@ -80,21 +80,11 @@ export const findGroupedTiles = (tiles) => {
   return realMatches;
 }
 
-export const getGatherStateValues = (getState) => {
-  let state = getState().gather;
-  return {
-    gridWidth: 5, //state.gridWidth,
-    gridHeight: 5, //state.gridHeight,
-    resourceTypes: state.resourceTypes,
-    grid: state.grid
-  }
-}
-
 export const gatherStateSelector = (state) => {
   state = state.gather;
   return {
-    gridWidth: 5, //state.gridWidth,
-    gridHeight: 5, //state.gridHeight,
+    gridWidth: GRID_SIZE, //state.gridWidth,
+    gridHeight: GRID_SIZE, //state.gridHeight,
     resourceTypes: state.resourceTypes,
     grid: state.grid
   };
