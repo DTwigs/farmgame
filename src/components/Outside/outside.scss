@@ -1,0 +1,55 @@
+.outside-container {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  height: 480px;
+  width: 480px;
+}
+
+.outside-row {
+  display: block;
+  height: 36px;
+}
+
+.the-dude {
+  position: absolute;
+  top: 37%;
+  right: 45%;
+  height: 32px;
+  width: 32px;
+  border-radius: 100px;
+  background-color: #e6b36c;
+}
+
+.map-tile {
+  height: 36px;
+  width: 36px;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  background-color: black;
+}
+
+.water {
+  background-color: blue;
+}
+
+.forest {
+  background-color: green;
+}
+
+.grass {
+  background-color: #aaff00;
+}
+
+.mountain {
+  background-color: #ababab;
+}
+
+.base {
+  background-color: brown;
+}
+
+.cave {
+  background-color: #8c8c8c;
+}

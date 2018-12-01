@@ -1,4 +1,4 @@
-export const GRID_SIZE = 5; // Grid height and width
+export const GRID_SIZE = 6; // Grid height and width
 
 export const TILE_SIZE = 64;
 
