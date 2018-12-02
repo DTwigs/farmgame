@@ -1,10 +1,9 @@
 import {
-  UPDATE_POSITION
+  UPDATE_MAP_POSITION
 } from '../actions.js'
 
 const ACTION_HANDLERS = {
-  [UPDATE_POSITION]: (state, action) => {
-    console.log(action.payload.position)
+  [UPDATE_MAP_POSITION]: (state, action) => {
     return action.payload.position;
   }
 }

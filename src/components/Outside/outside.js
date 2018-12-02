@@ -1,6 +1,10 @@
 import React from 'react';
 import { outsideMapData, mapTileTypes } from '../../routes/Outside/modules/outside-map-data.js';
-import { getViewPortGrid } from '../../routes/Outside/modules/outside-helpers.js';
+import {
+    getViewPortGrid,
+    collisionCheck,
+    MAP_TRIGGERS
+  } from '../../routes/Outside/modules/outside-helpers.js';
 import classes from './outside.scss';
 import { connect } from 'react-redux';
 import { updatePosition } from '../../routes/Outside/actions.js';
@@ -8,7 +12,7 @@ var Outside;
 
 Outside = React.createClass({
   componentDidMount () {
-    if (_.isEmpty(this.props.position)) {
+    if (_.isEmpty(this.props.mapPosition)) {
       this.props.updatePosition(this.findBasePosition());
     }
   },
@@ -26,10 +30,8 @@ Outside = React.createClass({
   },
 
   buildMapAroundPosition () {
-    let position = this.props.position,
+    let position = this.props.mapPosition,
       truncatedMap = [];
-
-    console.log(position);
 
     if (!position) { return; }
 
@@ -50,8 +52,9 @@ Outside = React.createClass({
   },
 
   handleKeyPress (e) {
-    let oldPosition = this.props.position,
-      newPosition = oldPosition;
+    let oldPosition = this.props.mapPosition,
+      newPosition = oldPosition,
+      collisionTrigger;
 
     switch (e.keyCode) {
       case 37: // left
@@ -68,7 +71,11 @@ Outside = React.createClass({
         break;
     }
 
-    this.props.updatePosition(newPosition);
+    // collisionTrigger = collisionCheck(newPosition);
+
+    // if (collisionTrigger !== MAP_TRIGGERS.stop) {
+      this.props.updatePosition(newPosition);
+    // }
   },
 
   render () {
@@ -88,7 +95,7 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state) => ({
-  position: state.outside.position,
+  mapPosition: state.outside.mapPosition,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Outside);

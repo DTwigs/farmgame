@@ -1,8 +1,17 @@
+import { outsideMapData, mapTileTypes } from './outside-map-data.js';
+
 export const GRID_RADIUS = 6;
+
+export const MAP_TRIGGERS = {
+  stop: 0,
+  gathering: 1,
+  fishing: 2,
+  camping: 3,
+}
 
 export const getViewPortGrid = function(map, position) {
   //get map subset
-  var minRow = position[1] - GRID_RADIUS,
+  let minRow = position[1] - GRID_RADIUS,
     maxRow = position[1] + GRID_RADIUS,
     minCol = position[0] - GRID_RADIUS,
     maxCol = position[0] + GRID_RADIUS,
@@ -17,4 +26,22 @@ export const getViewPortGrid = function(map, position) {
   }
 
   return truncatedMap;
-};
+}
+
+export const collisionCheck = function(position) {
+  let nextTile = outsideMapData[position[1]][position[0]],
+    nextTileType = mapTileTypes[nextTile];
+
+
+  switch (nextTileType) {
+    case "mountain":
+      return MAP_TRIGGERS.stop;
+    case "water":
+      return MAP_TRIGGERS.stop;
+    case "forest":
+      return MAP_TRIGGERS.gathering;
+    default:
+      return true;
+  };
+
+}

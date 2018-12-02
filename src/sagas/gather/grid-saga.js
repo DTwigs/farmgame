@@ -121,7 +121,7 @@ function* populateTiles() {
 
 export function* watchPopulateTiles() {
   while (true) {
-    const action = yield take(POPULATE_TILES);
+    yield take(POPULATE_TILES);
     yield call(populateTiles);
   }
 }
