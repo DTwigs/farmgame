@@ -1,9 +1,10 @@
 import { delay } from 'redux-saga';
 import { take, put, select, call } from 'redux-saga/effects';
-import { push } from 'react-router-redux';
 import {
   UPDATE_POSITION,
   updateMapPosition,
+  updateCanGather,
+  updateCanFish,
 } from '../../routes/Outside/actions.js';
 import {
   collisionCheck,
@@ -13,11 +14,22 @@ import {
 export function* watchUpdatePosition() {
   while (true) {
     const action = yield take(UPDATE_POSITION);
-    const trigger = yield call(collisionCheck, action.payload.position);
+    let trigger = yield call(collisionCheck, action.payload.position);
+
     if (trigger === MAP_TRIGGERS.gathering) {
-      yield put(updateMapPosition(action.payload.position));
-      yield put(push('/gather'));
-    } else if (trigger !== MAP_TRIGGERS.stop) {
+      yield put(updateCanGather(true));
+    } else {
+      yield put(updateCanGather(false));
+    }
+
+    if (trigger === MAP_TRIGGERS.fishing) {
+      yield put(updateCanFish(true));
+      trigger = MAP_TRIGGERS.stop;
+    } else {
+      yield put(updateCanFish(false));
+    }
+
+    if (trigger !== MAP_TRIGGERS.stop) {
       yield put(updateMapPosition(action.payload.position));
     }
   }

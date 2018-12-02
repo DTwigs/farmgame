@@ -5,6 +5,7 @@ import {
     collisionCheck,
     MAP_TRIGGERS
   } from '../../routes/Outside/modules/outside-helpers.js';
+import { Link } from 'react-router'
 import classes from './outside.scss';
 import { connect } from 'react-redux';
 import { updatePosition } from '../../routes/Outside/actions.js';
@@ -53,8 +54,7 @@ Outside = React.createClass({
 
   handleKeyPress (e) {
     let oldPosition = this.props.mapPosition,
-      newPosition = oldPosition,
-      collisionTrigger;
+      newPosition = oldPosition;
 
     switch (e.keyCode) {
       case 37: // left
@@ -71,11 +71,28 @@ Outside = React.createClass({
         break;
     }
 
-    // collisionTrigger = collisionCheck(newPosition);
+    this.props.updatePosition(newPosition);
+  },
 
-    // if (collisionTrigger !== MAP_TRIGGERS.stop) {
-      this.props.updatePosition(newPosition);
-    // }
+
+  getUIButtons () {
+    let buttons = [],
+      canFish = this.props.ui.canFish,
+      canGather = this.props.ui.canGather;
+
+    if (canGather) {
+      buttons.push(<Link className={classes['ui-action-button']} to="/gather">Gather</Link>);
+    }
+
+    if (canFish) {
+      buttons.push(<button className={classes['ui-action-button']}>Fish</button>);
+    }
+
+    return (
+      <div className={classes["outside-ui-buttons"]}>
+        { buttons }
+      </div>
+    );
   },
 
   render () {
@@ -84,6 +101,7 @@ Outside = React.createClass({
         <div onKeyDown={this.handleKeyPress} tabIndex="0">
           { this.buildMapAroundPosition() }
           <div className={classes["the-dude"]}></div>
+          { this.getUIButtons() }
         </div>
       </div>
     );
@@ -96,6 +114,7 @@ const mapDispatchToProps = {
 
 const mapStateToProps = (state) => ({
   mapPosition: state.outside.mapPosition,
+  ui: state.outside.ui,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Outside);

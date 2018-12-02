@@ -37,7 +37,7 @@ export const collisionCheck = function(position) {
     case "mountain":
       return MAP_TRIGGERS.stop;
     case "water":
-      return MAP_TRIGGERS.stop;
+      return MAP_TRIGGERS.fishing;
     case "forest":
       return MAP_TRIGGERS.gathering;
     default:
