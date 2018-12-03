@@ -1,4 +1,5 @@
 import React from 'react';
+import anime from 'animejs';
 import { outsideMapData, mapTileTypes } from '../../routes/Outside/modules/outside-map-data.js';
 import {
     getViewPortGrid,
@@ -6,6 +7,7 @@ import {
     MAP_TRIGGERS
   } from '../../routes/Outside/modules/outside-helpers.js';
 import { Link } from 'react-router'
+import { throttled } from '../../helpers/app-helpers.js';
 import classes from './outside.scss';
 import { connect } from 'react-redux';
 import { updatePosition } from '../../routes/Outside/actions.js';
@@ -16,6 +18,7 @@ Outside = React.createClass({
     if (_.isEmpty(this.props.mapPosition)) {
       this.props.updatePosition(this.findBasePosition());
     }
+    this.handleKeyPressThrottled = throttled(200, this.handleKeyPress);
   },
 
   findBasePosition() {
@@ -54,24 +57,42 @@ Outside = React.createClass({
 
   handleKeyPress (e) {
     let oldPosition = this.props.mapPosition,
-      newPosition = oldPosition;
+      newPosition = oldPosition,
+      direction = "down";
 
+    console.log('update pos');
     switch (e.keyCode) {
       case 37: // left
         newPosition = [oldPosition[0] - 1, oldPosition[1]];
+        direction = "left";
         break;
       case 38: // up
         newPosition = [oldPosition[0], oldPosition[1] - 1];
+        direction = "up";
         break;
       case 39: // right
         newPosition = [oldPosition[0] + 1, oldPosition[1]];
+        direction = "right";
         break;
       case 40: // down
+        direction = "down;"
         newPosition = [oldPosition[0], oldPosition[1] + 1];
         break;
     }
 
-    this.props.updatePosition(newPosition);
+
+    if (newPosition !== oldPosition) {
+      console.log('update pos');
+      this.props.updatePosition(newPosition, direction);
+      anime({
+        targets: "." + classes["the-dude"],
+        translateY: ["-6px", 0],
+        scale: [1.02, 1],
+        duration: 1600,
+        direction: 'alternate',
+        loop: false
+      });
+    }
   },
 
 
@@ -81,11 +102,11 @@ Outside = React.createClass({
       canGather = this.props.ui.canGather;
 
     if (canGather) {
-      buttons.push(<Link className={classes['ui-action-button']} to="/gather">Gather</Link>);
+      buttons.push(<Link key="gather-button" className={classes['ui-action-button']} to="/gather">Gather</Link>);
     }
 
     if (canFish) {
-      buttons.push(<button className={classes['ui-action-button']}>Fish</button>);
+      buttons.push(<button key="fish-button" className={classes['ui-action-button']}>Fish</button>);
     }
 
     return (
@@ -96,11 +117,15 @@ Outside = React.createClass({
   },
 
   render () {
+    let playerDirection = this.props.playerDirection;
+    console.log('rerender');
+    console.log(this.handleKeyPressThrottled);
     return (
       <div className={classes["outside-container"]}>
-        <div onKeyDown={this.handleKeyPress} tabIndex="0">
+        <div onKeyDown={this.handleKeyPressThrottled} tabIndex="0">
           { this.buildMapAroundPosition() }
-          <div className={classes["the-dude"]}></div>
+          <div className={[classes["the-dude"], classes[`the-dude-${playerDirection}`]].join(' ')}>
+          </div>
           { this.getUIButtons() }
         </div>
       </div>
@@ -113,7 +138,8 @@ const mapDispatchToProps = {
 };
 
 const mapStateToProps = (state) => ({
-  mapPosition: state.outside.mapPosition,
+  mapPosition: state.outside.mapPosition.coordinates,
+  playerDirection: state.outside.mapPosition.direction,
   ui: state.outside.ui,
 });
 

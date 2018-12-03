@@ -5,6 +5,7 @@ import {
   updateMapPosition,
   updateCanGather,
   updateCanFish,
+  updatePlayerDirection,
 } from '../../routes/Outside/actions.js';
 import {
   collisionCheck,
@@ -14,7 +15,7 @@ import {
 export function* watchUpdatePosition() {
   while (true) {
     const action = yield take(UPDATE_POSITION);
-    let trigger = yield call(collisionCheck, action.payload.position);
+    let trigger = yield call(collisionCheck, action.payload.coordinates);
 
     if (trigger === MAP_TRIGGERS.gathering) {
       yield put(updateCanGather(true));
@@ -30,8 +31,9 @@ export function* watchUpdatePosition() {
     }
 
     if (trigger !== MAP_TRIGGERS.stop) {
-      yield put(updateMapPosition(action.payload.position));
+      yield put(updateMapPosition(action.payload.coordinates));
     }
+    yield put(updatePlayerDirection(action.payload.direction));
   }
 }
 

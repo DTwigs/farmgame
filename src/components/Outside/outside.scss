@@ -30,12 +30,29 @@
 
 .the-dude {
   position: absolute;
-  top: 45%;
-  right: 46%;
-  height: 33px;
-  width: 33px;
-  border-radius: 100px;
-  background-color: #e6b36c;
+  top: 42%;
+  right: 44.5%;
+  height: 54px;
+  width: 54px;
+  background-image: url('components/Outside/assets/farmer.png');
+  background-repeat: no-repeat;
+  background-size: 163px 54px;
+}
+
+.the-dude-up {
+  background-position: -108px -3px;
+}
+
+.the-dude-down {
+  background-position: 0px -3px;
+}
+
+.the-dude-left {
+  background-position: -55px -3px;
+}
+
+.the-dude-right {
+  background-position: 0px -3px;
 }
 
 .map-tile {

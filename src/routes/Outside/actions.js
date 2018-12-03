@@ -3,23 +3,34 @@
 // ------------------------------------
 export const UPDATE_POSITION = 'outside/UPDATE_POSITION';
 export const UPDATE_MAP_POSITION = 'outside/UPDATE_MAP_POSITION';
+export const UPDATE_PLAYER_DIRECTION = 'outside/UPDATE_PLAYER_DIRECTION';
 export const UPDATE_CAN_FISH = 'outside/UPDATE_CAN_FISH';
 export const UPDATE_CAN_GATHER = 'outside/UPDATE_CAN_GATHER';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function updatePosition (position) {
+export function updatePosition (coordinates, direction) {
   return {
     type: UPDATE_POSITION,
-    payload: { position }
+    payload: {
+      coordinates,
+      direction
+    }
   };
 }
 
-export function updateMapPosition (position) {
+export function updateMapPosition (coordinates) {
   return {
     type: UPDATE_MAP_POSITION,
-    payload: { position }
+    payload: { coordinates }
+  };
+}
+
+export function updatePlayerDirection (direction) {
+  return {
+    type: UPDATE_PLAYER_DIRECTION,
+    payload: { direction }
   };
 }
 
