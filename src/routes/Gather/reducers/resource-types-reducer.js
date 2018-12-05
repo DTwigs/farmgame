@@ -24,8 +24,8 @@ const initialState = [{
   value: 1,
   quantity: 0
 },{
-  name: 'Berries',
-  type: 'BERRIES',
+  name: 'Rice',
+  type: 'RICE',
   value: 1,
   quantity: 0
 }, {

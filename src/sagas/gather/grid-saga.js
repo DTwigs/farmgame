@@ -35,7 +35,9 @@ function* findMatches(subsequentTry = false) {
 
 function* tallyUpResources(solvedTiles) {
   for (let i = 0; i < solvedTiles.length; i++) {
+
     yield put(updateResourceQuantity(solvedTiles[i].resource.type, solvedTiles[i].resource.value))
+    yield call(delay, ANIMATION_TIME / 4);
   }
 }
 

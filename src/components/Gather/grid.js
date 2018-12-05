@@ -1,7 +1,6 @@
 import React from 'react';
 import classes from './grid.scss';
 import Tile from './tile.js';
-import ResourceBar from '../ResourceBar/resource-bar.js';
 import { connect } from 'react-redux';
 import { populateResourceTiles, selectGridTile, unselectGridTile, swapAndMatch } from '../../routes/Gather/actions.js';
 import { tilesAreNeighbors, getAllSolvedMatches } from '../../routes/Gather/modules/grid-helpers.js';
@@ -72,7 +71,6 @@ export class Grid extends React.Component {
   render () {
     return (
       <div>
-        <ResourceBar></ResourceBar>
         <br />
         <div className={classes['tile-container']}>
           {this.getGridItems()}

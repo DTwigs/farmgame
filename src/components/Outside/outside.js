@@ -11,15 +11,18 @@ import { throttled } from '../../helpers/app-helpers.js';
 import classes from './outside.scss';
 import { connect } from 'react-redux';
 import { updatePosition } from '../../routes/Outside/actions.js';
-var Outside;
 
-Outside = React.createClass({
+export class Outside extends React.Component {
+  constructor (props) {
+    super(props);
+    this.handleKeyPressThrottled = throttled(200, this.handleKeyPress.bind(this));
+  }
+
   componentDidMount () {
     if (_.isEmpty(this.props.mapPosition)) {
       this.props.updatePosition(this.findBasePosition());
     }
-    this.handleKeyPressThrottled = throttled(200, this.handleKeyPress);
-  },
+  }
 
   findBasePosition() {
     var position = [0, 0];
@@ -31,7 +34,7 @@ Outside = React.createClass({
     });
 
     return position;
-  },
+  }
 
   buildMapAroundPosition () {
     let position = this.props.mapPosition,
@@ -53,7 +56,7 @@ Outside = React.createClass({
         </div>
       );
     });
-  },
+  }
 
   handleKeyPress (e) {
     let oldPosition = this.props.mapPosition,
@@ -82,7 +85,6 @@ Outside = React.createClass({
 
 
     if (newPosition !== oldPosition) {
-      console.log('update pos');
       this.props.updatePosition(newPosition, direction);
       anime({
         targets: "." + classes["the-dude"],
@@ -93,7 +95,7 @@ Outside = React.createClass({
         loop: false
       });
     }
-  },
+  }
 
 
   getUIButtons () {
@@ -114,7 +116,7 @@ Outside = React.createClass({
         { buttons }
       </div>
     );
-  },
+  }
 
   render () {
     let playerDirection = this.props.playerDirection;
@@ -131,7 +133,7 @@ Outside = React.createClass({
       </div>
     );
   }
-});
+};
 
 const mapDispatchToProps = {
   updatePosition

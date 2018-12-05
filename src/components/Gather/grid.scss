@@ -5,13 +5,13 @@
   width: 392px;
   height: 392px;
   margin: 0 auto;
-  border: 2px solid black;
+  // border: 2px solid black;
 }
 
 .tile {
   position: absolute;
   display: block;
-  border: 2px solid black;
+  // border: 2px solid black;
   border-radius: 4%;
   margin: 2px;
   padding: 20px 0;
@@ -32,27 +32,27 @@
 
 @keyframes poolTile {
   0% {
-    width: 64px;
-    height: 64px;
+    // width: 64px;
+    // height: 64px;
     color: inherit;
   },
   25% {
-    height: 75px;
-    width: 75px;
+    // height: 75px;
+    // width: 75px;
     color: transparent;
     opacity: 1;
   }
   60% {
     padding: 0;
-    height: 15px;
-    width: 15px;
+    // height: 15px;
+    // width: 15px;
     opacity: 1;
     color: transparent;
   },
   100% {
     padding: 0;
-    height: 15px;
-    width: 15px;
+    // height: 15px;
+    // width: 15px;
     opacity: 0;
     color: transparent;
   }
@@ -61,27 +61,31 @@
 .pooled {
   opacity: 0;
   padding: 0;
-  height: 15px;
-  width: 15px;
+  // height: 15px;
+  // width: 15px;
   animation: poolTile 600ms;
   transition: transform 600ms linear;
   z-index: 2;
 }
 
-.WATER {
-  background-color: #00ccff;
-  color: black;
+.resource-tile {
+  background-image: url('components/Gather/assets/resources.png');
+  background-repeat: no-repeat;
+  background-size: 240px 60px;
 }
 
-.BERRIES {
-  background-color: purple;
+.WATER {
+  background-position: -122px -3px;
+}
+
+.RICE {
+  background-position: -182px -2px;
 }
 
 .WOOD {
-  background-color: brown;
+  background-position: -3px -2px;
 }
 
 .STONE {
-  color: black;
-  background-color: #eee;
+  background-position: -65px -4px;
 }

@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react'
+import classes from './grid.scss'
 
 const Tile = ({ onClick, name, style, className }) => (
   <div
     style={style}
-    className={className}
+    className={className + " " + classes['resource-tile']}
     onClick={onClick}>
-    {name}
   </div>
 )
 
