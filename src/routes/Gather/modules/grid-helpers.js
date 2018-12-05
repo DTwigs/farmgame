@@ -2,7 +2,7 @@ export const GRID_SIZE = 6; // Grid height and width
 
 export const TILE_SIZE = 64;
 
-export const ANIMATION_TIME = 175;
+export const ANIMATION_TIME = 225;
 
 export const updateTilePosition = (tile, c, r) => {
   tile.column = c;

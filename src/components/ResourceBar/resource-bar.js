@@ -46,7 +46,7 @@ export class ResourceBar extends React.Component {
                 <AnimatedNumber
                   stepPrecision={0}
                   value={resource.quantity}
-                  duration={1000} />
+                  duration={3000} />
               </span>
           </div>
         </li>

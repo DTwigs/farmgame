@@ -10,7 +10,9 @@ export const CoreLayout = ({ children }) => (
 
     <div className={classes.mainContainer}>
       <ResourceBar></ResourceBar>
-      {children}
+      <div className={classes["center-screen-container"]}>
+        {children}
+      </div>
     </div>
   </div>
 )

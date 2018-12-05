@@ -3,6 +3,7 @@ import CoreLayout from '../layouts/CoreLayout/CoreLayout'
 import Home from './Home'
 import Gather from './Gather'
 import Outside from './Outside'
+import Camp from './Camp'
 import CounterRoute from './Counter'
 
 /*  Note: Instead of using JSX, we recommend using react-router
@@ -15,7 +16,8 @@ export const createRoutes = (store) => ({
   childRoutes: [
     CounterRoute(store),
     Gather,
-    Outside
+    Outside,
+    Camp,
   ]
 })
 

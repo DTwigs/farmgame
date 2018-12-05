@@ -1,0 +1,118 @@
+.campfire-container {
+  width: 400px;
+  height: 50px;
+  margin: 0 auto;
+}
+
+.crafting-container {
+  position: relative;
+  width: 450px;
+  height: 400px;
+  margin: 0 auto;
+  color: white;
+  text-shadow: 1px 1px 1px black, -1px -1px 1px black, 1px -1px 1px black, -1px 1px 1px black;
+}
+
+.crafting-tabs {
+  margin-left: 25px;
+}
+
+.crafting-tabs_tab {
+  position: relative;
+  top: 2px;
+  display: inline-block;
+  padding: 10px 25px;
+  border: 2px solid brown;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  background-color: #ffb759;
+  letter-spacing: .06em;
+  z-index: 5;
+}
+
+.crafting-body {
+  position: relative;
+  height: 300px;
+  width: 100%;
+  padding: 20px 25px;
+  border: 2px solid brown;
+  border-radius: 8px;
+  background-color: #ffb759;
+}
+
+.FISHING_POLE {
+  background-image: url('components/Camp/assets/fishingPole.png');
+  background-repeat: no-repeat;
+  background-size: 60px 60px;
+}
+
+.craft-item {
+  display: inline-block;
+  position: relative;
+  height: 60px;
+  width: 60px;
+  margin: 0 10px 10px 0;
+  opacity: .5;
+
+  &.craftable {
+    opacity: 1;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-size: 63px 63px;
+    top: -2px;
+
+    &:after {
+      display: block;
+      content: "";
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      border-top: 3px solid brown;
+      border-left: 3px solid brown;
+    }
+
+    &:before {
+      display: block;
+      content: "";
+      width: 12px;
+      height: 12px;
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      border-bottom: 3px solid brown;
+      border-right: 3px solid brown;
+    }
+
+    .craft-item_cornerer {
+      &:after {
+        display: block;
+        content: "";
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        border-top: 3px solid brown;
+        border-right: 3px solid brown;
+      }
+
+      &:before {
+        display: block;
+        content: "";
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        bottom: -5px;
+        left: -5px;
+        border-bottom: 3px solid brown;
+        border-left: 3px solid brown;
+      }
+    }
+  }
+}
+
+

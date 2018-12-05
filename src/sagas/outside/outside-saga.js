@@ -5,6 +5,7 @@ import {
   updateMapPosition,
   updateCanGather,
   updateCanFish,
+  updateCanCamp,
   updatePlayerDirection,
 } from '../../routes/Outside/actions.js';
 import {
@@ -28,6 +29,12 @@ export function* watchUpdatePosition() {
       trigger = MAP_TRIGGERS.stop;
     } else {
       yield put(updateCanFish(false));
+    }
+
+    if (trigger === MAP_TRIGGERS.camping) {
+      yield put(updateCanCamp(true));
+    } else {
+      yield put(updateCanCamp(false));
     }
 
     if (trigger !== MAP_TRIGGERS.stop) {

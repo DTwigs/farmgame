@@ -40,6 +40,8 @@ export const collisionCheck = function(position) {
       return MAP_TRIGGERS.fishing;
     case "forest":
       return MAP_TRIGGERS.gathering;
+    case "base":
+      return MAP_TRIGGERS.camping;
     default:
       return true;
   };

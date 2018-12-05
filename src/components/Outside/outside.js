@@ -101,7 +101,8 @@ export class Outside extends React.Component {
   getUIButtons () {
     let buttons = [],
       canFish = this.props.ui.canFish,
-      canGather = this.props.ui.canGather;
+      canGather = this.props.ui.canGather,
+      canCamp = this.props.ui.canCamp;
 
     if (canGather) {
       buttons.push(<Link key="gather-button" className={classes['ui-action-button']} to="/gather">Gather</Link>);
@@ -109,6 +110,10 @@ export class Outside extends React.Component {
 
     if (canFish) {
       buttons.push(<button key="fish-button" className={classes['ui-action-button']}>Fish</button>);
+    }
+
+    if (canCamp) {
+      buttons.push(<Link key="camp-button" className={classes['ui-action-button']} to="/camp">Camp</Link>);
     }
 
     return (

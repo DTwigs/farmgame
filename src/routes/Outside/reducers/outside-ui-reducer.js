@@ -1,6 +1,7 @@
 import {
   UPDATE_CAN_FISH,
   UPDATE_CAN_GATHER,
+  UPDATE_CAN_CAMP,
 } from '../actions.js'
 
 const ACTION_HANDLERS = {
@@ -15,12 +16,19 @@ const ACTION_HANDLERS = {
       ...state,
       canGather: action.payload.canGather,
     };
+  },
+  [UPDATE_CAN_CAMP]: (state, action) => {
+    return {
+      ...state,
+      canCamp: action.payload.canCamp,
+    };
   }
 }
 
 const initialState = {
   canFish: false,
   canGather: false,
+  canCamp: false,
 }
 
 export default function outsideUIReducer (state = initialState, action) {
