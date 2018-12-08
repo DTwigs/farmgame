@@ -2,6 +2,9 @@ import {
   ADD_RESOURCE_TYPE,
   UPDATE_RESOURCE_QUANTITY
 } from '../actions.js';
+import {
+  DEDUCT_RECIPE_COST
+} from '../../Camp/actions.js';
 
 const ACTION_HANDLERS = {
   [ADD_RESOURCE_TYPE]: (state, action) => {
@@ -15,7 +18,18 @@ const ACTION_HANDLERS = {
     if (!resource) return state
     resource.quantity += action.quantity
     return _.cloneDeep(state)
-  }
+  },
+  [DEDUCT_RECIPE_COST]: (state, action) => {
+    const costs = action.payload.cost;
+
+    for (let key in action.payload.cost) {
+      let resourceType = _.find(state, {type: key}),
+        newQuantity = resourceType ? resourceType.quantity - costs[key] : 0;
+      resourceType.quantity = newQuantity >= 0 ? newQuantity : 0;
+    }
+
+    return _.cloneDeep(state);
+  },
 }
 
 const initialState = [{

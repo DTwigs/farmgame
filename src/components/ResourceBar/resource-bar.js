@@ -4,6 +4,7 @@ import classes from './resource-bar.scss';
 import { connect } from 'react-redux';
 import anime from 'animejs';
 import AnimatedNumber from 'react-animated-number';
+import DisplayItem from '../DisplayItem/display-item.js';
 
 export class ResourceBar extends React.Component {
   constructor (props) {
@@ -35,20 +36,15 @@ export class ResourceBar extends React.Component {
 
   getResoureValues() {
     return _.map(this.props.resourceTypes, (resource) => {
+      let animatedQuantity = (<AnimatedNumber
+          stepPrecision={0}
+          value={resource.quantity}
+          duration={500} />
+          );
+
       return (
-        <li className={`${classes['resource-bar_item']}  resource-bar_item-${resource.type}`} key={resource.type} >
-          <div className={classes['resource-bar_item-container']}>
-              <span className={`${classes["resource-bar_item-icon"]} ${classes[resource.type]}`}></span>
-              <div className={classes['resource-bar_item-name']}>
-                {resource.type}
-              </div>
-              <span className={classes['resource-bar_item-quantity']}>
-                <AnimatedNumber
-                  stepPrecision={0}
-                  value={resource.quantity}
-                  duration={3000} />
-              </span>
-          </div>
+        <li className={`${classes['resource-bar_item']}  resource-bar_item-${resource.type}`} key={resource.type}>
+          <DisplayItem name={resource.type} quantity={animatedQuantity} type={resource.type} />
         </li>
       );
     });

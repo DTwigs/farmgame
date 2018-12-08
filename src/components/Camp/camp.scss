@@ -54,8 +54,15 @@
   margin: 0 10px 10px 0;
   opacity: .5;
 
-  &.craftable {
-    opacity: 1;
+  &:hover:after, &:hover:before,
+  &:hover .craft-item_cornerer:after,
+  &:hover .craft-item_cornerer:before {
+    display: block;
+    content: "";
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    border-color: #242424;
   }
 
   &:hover {
@@ -64,55 +71,87 @@
     top: -2px;
 
     &:after {
-      display: block;
-      content: "";
-      width: 12px;
-      height: 12px;
-      position: absolute;
       top: -5px;
       left: -5px;
-      border-top: 3px solid brown;
-      border-left: 3px solid brown;
+      border-top: 3px solid;
+      border-left: 3px solid;
     }
 
     &:before {
-      display: block;
-      content: "";
-      width: 12px;
-      height: 12px;
-      position: absolute;
       bottom: -5px;
       right: -5px;
-      border-bottom: 3px solid brown;
-      border-right: 3px solid brown;
+      border-bottom: 3px solid;
+      border-right: 3px solid;
     }
 
     .craft-item_cornerer {
       &:after {
-        display: block;
-        content: "";
-        width: 12px;
-        height: 12px;
-        position: absolute;
         top: -5px;
         right: -5px;
-        border-top: 3px solid brown;
-        border-right: 3px solid brown;
+        border-top: 3px solid;
+        border-right: 3px solid;
       }
 
       &:before {
-        display: block;
-        content: "";
-        width: 12px;
-        height: 12px;
-        position: absolute;
         bottom: -5px;
         left: -5px;
-        border-bottom: 3px solid brown;
-        border-left: 3px solid brown;
+        border-bottom: 3px solid;
+        border-left: 3px solid;
       }
     }
+
+    .craft-item_recipe-cost {
+      display: block;
+    }
   }
+
+  &.craftable {
+    opacity: 1;
+
+    &:hover:after, &:hover:before,
+    &:hover .craft-item_cornerer:after,
+    &:hover .craft-item_cornerer:before {
+      border-color: brown;
+    }
+  }
+}
+
+.craft-item_recipe-cost {
+  display: none;
+  position: absolute;
+  top: 65px;
+  list-style-type: none;
+  width: 120px;
+  border: 2px solid brown;
+  background-color: #ffb759;
+  border-radius: 8px;
+  padding: 5px 8px;
+  opacity: 1;
+}
+
+.craft-item_recipt-cost_title {
+  color: #22242E;
+  font-size: 14px;
+  text-shadow: none;
+  width: 95%;
+  padding: 0 0 5px 8px;
+  margin: 0 auto 5px;
+  border-bottom: 2px solid #22242E;
+}
+
+.craft-item_recipt-cost_ingredients {
+  margin-bottom: 5px;
+}
+
+.craft-item_recipe-cost-list {
+  list-style-type: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.craft-item_recipe-cost-list_item {
+  display: inline-block;
 }
 
 

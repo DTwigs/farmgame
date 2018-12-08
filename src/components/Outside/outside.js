@@ -125,8 +125,6 @@ export class Outside extends React.Component {
 
   render () {
     let playerDirection = this.props.playerDirection;
-    console.log('rerender');
-    console.log(this.handleKeyPressThrottled);
     return (
       <div className={classes["outside-container"]}>
         <div onKeyDown={this.handleKeyPressThrottled} tabIndex="0">
