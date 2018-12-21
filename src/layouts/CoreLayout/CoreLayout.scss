@@ -1,12 +1,27 @@
 .mainContainer {
   padding-top:20px;
-  width: 500px;
+  width: 650px;
   margin: 0 auto;
 }
 
-.center-screen-container {
+.screen-container_center {
   height: 480px;
-  width: 480px;
-  margin: 0 auto;
+  width: 470px;
   overflow: hidden;
+  display: inline-block;
+}
+
+.screen-container_left-side {
+  width: 78px;
+  height: 480px;
+  overflow: hidden;
+  display: inline-block;
+  margin: 0 0 0 12px;
+}
+.screen-container_right-side {
+  width: 78px;
+  height: 480px;
+  overflow: hidden;
+  display: inline-block;
+  margin: 0 12px 0 0;
 }
